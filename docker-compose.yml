@@ -1,0 +1,16 @@
+version: "3.8"
+name: currency-exchange
+services:
+    currency-exchange:
+        container_name: currency-exchange
+        build:
+            context: .
+            target: dev
+        restart: always
+        command: yarn dev
+        tty: true
+        volumes:
+            - .:/app
+            - /app/node_modules
+        ports:
+            - "8000:8000"
