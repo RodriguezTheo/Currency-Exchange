@@ -1,35 +1,46 @@
-# currencyexchange
+# Currency Exchange
 
-This template should help get you started developing with Vue 3 in Vite.
+Ce projet est une application de conversion de devises utilisant l'API ExchangeRate.
 
-## Recommended IDE Setup
+## Prérequis
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+- Docker
+- Une clé API de [ExchangeRate-API](https://www.exchangerate-api.com/)
 
-## Customize configuration
+## Configuration
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+1. Clonez ce dépôt sur votre machine locale.
 
-## Project Setup
-
-```sh
-yarn
+```bash
+git clone <url-du-depot>
 ```
 
-### Compile and Hot-Reload for Development
+2. Naviguez vers le répertoire du projet.
 
-```sh
-yarn dev
+```bash
+cd currencyExchange
 ```
 
-### Compile and Minify for Production
+3. Créez un fichier <span style="color:yellow">.env</span> à la racine du projet. Ajoutez votre clé API ExchangeRate-API à ce fichier.
 
-```sh
-yarn build
+```bash
+echo "EXCHANGE_RATE_API_KEY=<votre-cle-api>" > .env
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+Remplacez  <span style="color:yellow"><votre-cle-api></span> par votre clé API ExchangeRate-API.
 
-```sh
-yarn lint
+## Démarrage du projet
+
+Utilisez docker-compose.
+
+```bash
+docker-compose up --build -d
 ```
+
+L'application devrait maintenant être accessible à l'adresse http://localhost:8000.
+
+## Scripts NPM
+
++ <span style="color:yellow">yarn dev</span> : Compile et recharge à chaud pour le développement
++ <span style="color:yellow">yarn lint</span> : Lint avec ESLint
+
