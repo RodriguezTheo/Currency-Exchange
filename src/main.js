@@ -1,6 +1,7 @@
-import './assets/main.css'
+import "./assets/main.scss";
+import "vue-multiselect/dist/vue-multiselect.css";
 
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from "vue";
+import App from "./App.vue";
 
-createApp(App).mount('#app')
+createApp(App).mount("#app");

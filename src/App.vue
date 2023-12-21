@@ -1,47 +1,126 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue';
-import TheWelcome from './components/TheWelcome.vue';
+import HeaderMain from "@/components/HeaderMain.vue";
+import ContainerExchange from "@/components/ContainerExchange.vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { ExchangeRateServices } from "@/services/exchangeRateServices.js";
+import { formatDataCurrencies } from "@/utils/formatDataCurrencies.js";
+import ExchangeButton from "@/components/buttons/ExchangeButton.vue";
+
+const baseCurrency = ref(null);
+const baseCode = computed(() => baseCurrency.value?.code);
+
+const targetCurrency = ref(null);
+const targetCode = computed(() => targetCurrency.value?.code);
+
+const targetValue = computed(() => conversionRates.value[targetCode.value]);
+
+const switchTargetAndBase = ref(false);
+
+const conversionRates = ref(null);
+const setConversionRates = (data) => {
+  conversionRates.value = data;
+};
+
+const options = ref([]);
+const setOptions = (data) => {
+  options.value = data;
+};
+
+const fetchCurrencies = async () => {
+  try {
+    const res = await ExchangeRateServices.getSupportedCurrencies();
+
+    const isSuccessful = res.result === "success";
+    const data = res.supported_codes;
+    const hasData = data?.length > 0;
+
+    if (isSuccessful && hasData) {
+      return formatDataCurrencies(data);
+    }
+    return [];
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const fetchExchangeRate = async (code) => {
+  try {
+    const res = await ExchangeRateServices.getExchangeRate(code);
+
+    const isSuccessful = res.result === "success";
+    const data = res.conversion_rates;
+
+    if (isSuccessful) {
+      return data;
+    }
+    return null;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const setInitialsValues = () => {
+  const usdTarget = options.value.find((item) => item.code === "USD");
+  baseCurrency.value = usdTarget;
+  targetCurrency.value = usdTarget;
+};
+
+watch([baseCode, targetCode], async () => {
+  const res = await fetchExchangeRate(baseCode.value);
+  setConversionRates(res);
+});
+
+watch(switchTargetAndBase, () => {
+  const oldBase = baseCurrency.value;
+  const oldTarget = targetCurrency.value;
+
+  baseCurrency.value = oldTarget;
+  targetCurrency.value = oldBase;
+});
+
+onMounted(async () => {
+  const currencies = await fetchCurrencies();
+  setOptions(currencies);
+  setInitialsValues();
+});
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <div
+    class="relative overflow-hidden flex flex-col min-h-screen bg-gray-100 bg-center"
+  >
+    <HeaderMain title="Currency Exchange Rate" />
+    <main class="flex-grow flex flex-col items-center justify-center">
+      <div class="flex flex-col gap-4 lg:flex-row">
+        <ContainerExchange
+          v-if="baseCurrency"
+          v-model="baseCurrency"
+          :headerContent="{
+            title: 'Base currency',
+            subTitle: 'Choose base currency to get exchange rate.',
+          }"
+          :options="options"
+          conversionValue="1"
+        />
+        <div class="relative flex justify-center items-center mx-2">
+          <ExchangeButton v-model="switchTargetAndBase" />
+          <span
+            class="border-gray-200 border w-full lg:w-0 lg:h-full absolute lg:right-1/2"
+          ></span>
+        </div>
+        <ContainerExchange
+          v-if="targetCurrency"
+          v-model="targetCurrency"
+          :headerContent="{
+            title: 'Target currency',
+            subTitle: 'Choose target currency to get exchange rate.',
+          }"
+          :options="options"
+          :conversionValue="targetValue"
+        />
+      </div>
+    </main>
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
+<style scoped></style>
