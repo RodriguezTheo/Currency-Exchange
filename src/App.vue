@@ -12,7 +12,9 @@ const baseCode = computed(() => baseCurrency.value?.code);
 const targetCurrency = ref(null);
 const targetCode = computed(() => targetCurrency.value?.code);
 
-const targetValue = computed(() => conversionRates.value[targetCode.value]);
+const targetValue = computed(() =>
+  conversionRates.value ? conversionRates.value[targetCode.value] : null
+);
 
 const switchTargetAndBase = ref(false);
 
@@ -60,6 +62,7 @@ const fetchExchangeRate = async (code) => {
 };
 
 const setInitialsValues = () => {
+  if (!options.value.length) return;
   const usdTarget = options.value.find((item) => item.code === "USD");
   baseCurrency.value = usdTarget;
   targetCurrency.value = usdTarget;
@@ -91,36 +94,46 @@ onMounted(async () => {
   >
     <HeaderMain title="Currency Exchange Rate" />
     <main class="flex-grow flex flex-col items-center justify-center">
-      <div class="flex flex-col gap-4 lg:flex-row">
-        <ContainerExchange
-          v-if="baseCurrency"
-          v-model="baseCurrency"
-          :headerContent="{
-            title: 'Base currency',
-            subTitle: 'Choose base currency to get exchange rate.',
-          }"
-          :options="options"
-          conversionValue="1"
-        />
-        <div class="relative flex justify-center items-center mx-2">
-          <ExchangeButton v-model="switchTargetAndBase" />
-          <span
-            class="border-gray-200 border w-full lg:w-0 lg:h-full absolute lg:right-1/2"
-          ></span>
+      <Transition name="fade">
+        <div v-if="targetValue" class="flex flex-col gap-4 lg:flex-row">
+          <ContainerExchange
+            v-model="baseCurrency"
+            :headerContent="{
+              title: 'Base currency',
+              subTitle: 'Choose base currency to get exchange rate.',
+            }"
+            :options="options"
+            conversionValue="1"
+          />
+          <div class="relative flex justify-center items-center mx-2">
+            <ExchangeButton v-model="switchTargetAndBase" />
+            <span
+              class="border-gray-200 border w-full lg:w-0 lg:h-full absolute lg:right-1/2"
+            ></span>
+          </div>
+          <ContainerExchange
+            v-model="targetCurrency"
+            :headerContent="{
+              title: 'Target currency',
+              subTitle: 'Choose target currency to get exchange rate.',
+            }"
+            :options="options"
+            :conversionValue="targetValue"
+          />
         </div>
-        <ContainerExchange
-          v-if="targetCurrency"
-          v-model="targetCurrency"
-          :headerContent="{
-            title: 'Target currency',
-            subTitle: 'Choose target currency to get exchange rate.',
-          }"
-          :options="options"
-          :conversionValue="targetValue"
-        />
-      </div>
+      </Transition>
     </main>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

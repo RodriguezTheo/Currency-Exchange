@@ -31,11 +31,11 @@ watch(value, (newValue) => {
 watch(
   () => props.modelValue,
   (newValue) => {
-    value.value = newValue;
+    if (value.value) {
+      value.value = newValue;
+    }
   }
 );
-
-console.log(props.options);
 </script>
 
 <template>
