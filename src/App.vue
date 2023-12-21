@@ -50,7 +50,7 @@ const fetchExchangeRate = async (code) => {
     const isSuccessful = res.result === "success";
     const data = res.conversion_rates;
 
-    if (isSuccessful) {
+    if (isSuccessful && data) {
       return data;
     }
     return null;
