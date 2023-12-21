@@ -1,16 +1,16 @@
-import {ExchangeRateApi} from "../api/exchangeRateApi.js";
+import { ExchangeRateApi } from "../api/exchangeRateApi.js";
 
-function exchangeRateServices (){
-    const api = ExchangeRateApi
-    return {
-        async getExchangeRate(currency){
-            return api.getExchangeRate(currency)
-        },
+function exchangeRateServices() {
+  const api = ExchangeRateApi;
+  return {
+    async getExchangeRate(currency) {
+      return api.getExchangeRate(currency);
+    },
 
-        async getSupportedCurrencies(){
-            return api.getSupportedCurrencies()
-        }
-    }
+    async getSupportedCurrencies() {
+      return api.getSupportedCurrencies();
+    },
+  };
 }
 
-export const ExchangeRateServices = exchangeRateServices()
+export const ExchangeRateServices = exchangeRateServices();
