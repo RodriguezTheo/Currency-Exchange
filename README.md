@@ -19,6 +19,7 @@ git clone <url-du-depot>
 
 ```bash
 cd currencyExchange
+yarn install
 ```
 
 3. Créez un fichier <span style="color:yellow">.env</span> à la racine du projet. Ajoutez votre clé API ExchangeRate-API à ce fichier.
