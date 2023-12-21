@@ -25,7 +25,7 @@ yarn install
 3. Créez un fichier <span style="color:yellow">.env</span> à la racine du projet. Ajoutez votre clé API ExchangeRate-API à ce fichier.
 
 ```bash
-echo "EXCHANGE_RATE_API_KEY=<votre-cle-api>" > .env
+echo "VITE_API_KEY=<API_KEY_FROM_EXCHANGE_RATE_API>" > .env
 ```
 
 Remplacez  <span style="color:yellow"><votre-cle-api></span> par votre clé API ExchangeRate-API.
