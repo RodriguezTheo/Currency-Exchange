@@ -26,7 +26,7 @@ const setOptions = (data) => {
   options.value = data;
 };
 
-const fetchCurrencies = async () => {
+const fetchSupportedCurrencies = async () => {
   try {
     const res = await ExchangeRateServices.getSupportedCurrencies();
 
@@ -80,7 +80,7 @@ const handleChangeTargetAndBase = () => {
 };
 
 onMounted(async () => {
-  const currencies = await fetchCurrencies();
+  const currencies = await fetchSupportedCurrencies();
   setOptions(currencies);
   setInitialsValues();
 });
