@@ -73,13 +73,13 @@ watch([baseCode, targetCode], async () => {
   setConversionRates(res);
 });
 
-watch(switchTargetAndBase, () => {
+const handleChangeTargetAndBase = () => {
   const oldBase = baseCurrency.value;
   const oldTarget = targetCurrency.value;
 
   baseCurrency.value = oldTarget;
   targetCurrency.value = oldBase;
-});
+}
 
 onMounted(async () => {
   const currencies = await fetchCurrencies();
@@ -106,7 +106,7 @@ onMounted(async () => {
             conversionValue="1"
           />
           <div class="relative flex justify-center items-center mx-2">
-            <ExchangeButton v-model="switchTargetAndBase" />
+            <ExchangeButton @click="handleChangeTargetAndBase" />
             <span
               class="border-gray-200 border w-full lg:w-0 lg:h-full absolute lg:right-1/2"
             ></span>

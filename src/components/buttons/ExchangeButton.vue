@@ -1,18 +1,12 @@
 <script setup>
 import ArrowRightLeftIcon from "@/components/icons/ArrowRightLeftIcon.vue";
 
-defineProps({
-  modelValue: {
-    type: Boolean,
-    required: true,
-  },
-});
+
 </script>
 
 <template>
   <button
     class="relative z-10 w-[50px] h-[50px] rounded-full"
-    @click="$emit('update:modelValue', !$props.modelValue)"
   >
     <span class="hidden">Exchange</span>
     <span
